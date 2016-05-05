@@ -32,7 +32,7 @@
   tmpl.load = function (id) {
     return document.getElementById(id).innerHTML
   }
-  tmpl.regexp = /([\s'\\])(?!(?:[^{]|\{(?!%))*%\})|(?:\{%(=|#)([\s\S]+?)%\})|(\{%)|(%\})/g
+  tmpl.regexp = /([\s'\\])(?!(?:[^{]|\{(?!%))*%\})|(?:!%(=|#)([\s\S]+?)%!)|(!%)|(%!)/g
   tmpl.func = function (s, p1, p2, p3, p4, p5) {
     if (p1) { // whitespace, quote and backspace in HTML context
       return {
@@ -42,16 +42,16 @@
         ' ': ' '
       }[p1] || '\\' + p1
     }
-    if (p2) { // interpolation: {%=prop%}, or unescaped: {%#prop%}
+    if (p2) { // interpolation: !%=prop%!, or unescaped: !%#prop%!
       if (p2 === '=') {
         return "'+_e(" + p3 + ")+'"
       }
       return "'+(" + p3 + "==null?'':" + p3 + ")+'"
     }
-    if (p4) { // evaluation start tag: {%
+    if (p4) { // evaluation start tag: !%
       return "';"
     }
-    if (p5) { // evaluation end tag: %}
+    if (p5) { // evaluation end tag: %!
       return "_s+='"
     }
   }
